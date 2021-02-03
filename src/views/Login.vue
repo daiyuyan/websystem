@@ -132,10 +132,10 @@ export default {
       })
       .then(res => {
               console.log(res.data);
-              console.log(res.data.status);
-              if (res.data == true) {
+              console.log(res.data.state);
+              if (res.data.state == true) {
                 //this.$root.doctorid=this.$refs[formName].id
-                this.$root.doctorid=this.LoginForm.id
+                this.$root.doctorid=res.data.data.d_id
                 console.log(this.$root.doctorid)
                 this.$router.push("/home");
               }

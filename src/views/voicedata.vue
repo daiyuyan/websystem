@@ -166,27 +166,21 @@ export default {
       multipleSelection: []
     }
     },
-    created(){
+    onload(){
       const that=this;
-      if(this.$route.params.p_id==undefined)
-        {
-          that.p_id=sessionStorage.getItem("p_id")
-          that.p_name=sessionStorage.getItem("p_name")
-          that.p_age=sessionStorage.getItem("p_age")
-          that.p_sex=sessionStorage.getItem("p_sex")
-          that.d_institution=sessionStorage.getItem("d_institution")
-        }
-     // var d_id=this.$root.doctorid
-
-     console.log(that.$route.params)
-      this.$axios.get(Api.removeMedicationUrl+"/"+that.p_id)
+      if(sessionStorage.getItem("p_id"))
+      {
+        p_id=sessionStorage.getItem("p_id");
+      }
+      console.log("p_id="+that.p_id)
+      this.$axios.get(Api.removeMedicationUrl+that.p_id)
            .then(function(response){
                   console.log("This is response!");
-                  console.info(response.data);
+                  console.info(response.data.data);
                  // console.info(response.data[0].patientList);
-                  that.newData=response.data;
-                   console.info(response.data.length);
-                   var n=response.data.length;
+                  that.newData=response.data.data;
+                   console.info(response.data.data.length);
+                   var n=response.data.data.length;
                   console.info(that.newData);
                    that.newData.forEach((item,index)=>{
                   // for(let i=0;i<n;i++)
@@ -217,7 +211,59 @@ export default {
            .catch(function(error){
                    console.info(error);
                  });
-                 window.addEventListener('beforeunload', () => {
+    },
+    created(){
+      const that=this;
+      if(this.$route.params.p_id==undefined)
+        {
+          that.p_id=sessionStorage.getItem("p_id")
+          that.p_name=sessionStorage.getItem("p_name")
+          that.p_age=sessionStorage.getItem("p_age")
+          that.p_sex=sessionStorage.getItem("p_sex")
+          that.d_institution=sessionStorage.getItem("d_institution")
+        }
+     // var d_id=this.$root.doctorid
+
+     console.log(that.$route.params)
+      this.$axios.get(Api.removeMedicationUrl+that.p_id)
+           .then(function(response){
+                  console.log("This is response!");
+                  console.info(response.data.data);
+                 // console.info(response.data[0].patientList);
+                  that.newData=response.data.data;
+                   console.info(response.data.data.length);
+                   var n=response.data.data.length;
+                  console.info(that.newData);
+                   that.newData.forEach((item,index)=>{
+                  // for(let i=0;i<n;i++)
+                    //{
+                      let current={
+                        lung_type: item.lung_type,
+                        f_id: item.f_id,
+                        image: item.spectrum_image,
+                        p_id:that.p_id,
+                        p_name:that.p_name,
+                        p_age:that.p_age,
+                        descript:item.lung_description,
+                        p_sex:that.p_sex,
+                        d_id:item.collect_d_id,
+                        d_institution:that.d_institution,
+                        f_url:item.lung_file,
+                        f_date:item.collect_time,
+                        ct_description:item.ct_description,
+                        ct_image:item.ct_image,
+                        collect_site:item.collect_site,                   }
+                    that.tableData.push(current);
+                   // console.info(that.tableData);
+                   // console.log(i);
+                  //  }
+                  })
+                   console.info(that.tableData);
+                 })
+           .catch(function(error){
+                   console.info(error);
+                 });
+             window.addEventListener('beforeunload', () => {
              sessionStorage.setItem("p_id",that.p_id)
              sessionStorage.setItem("p_name",that.p_name)
              sessionStorage.setItem("p_age",that.p_age)

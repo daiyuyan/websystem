@@ -25,13 +25,13 @@ const loginUrl=rootUrl+"/enter";
 
 const socketURL = "ws://129.204.188.223:8084/lung/" + "/websocket";
 
-const removeMedicationUrl = rootUrl + "/getFile";
+const removeMedicationUrl = rootUrl + "getFile?p_id=";
 
 const queryMedicationsUrl = rootUrl + "/hims/prescription/medications";
 
 const fullRefundPrescriptionUrl = rootUrl + "/hims/prescription/refund";
 
-const registerUrl =rootUrl +"/getPatientMessage";
+const registerUrl =rootUrl +"getPatientMessage?d_id=";
 
 
 

@@ -54,7 +54,7 @@
       label="操作"
       width="100">
       <template slot-scope="scope">
-        <el-button ref="btn1" @click="open($event,scope.row)" type="text" size="small">创建远程听诊</el-button>
+        <el-button ref="btn1" @click="open($event,scope.row)" type="text" size="small">肺音数据</el-button>
       </template>
     </el-table-column>
     <el-table-column
@@ -100,6 +100,28 @@ export default {
         tableData:[]
       }
     },
+    onload(){
+      console.log("onload")
+        const that=this;
+      console.log(this.$root.doctorid)
+      var d_id=this.$root.doctorid
+      if(sessionStorage.getItem("d_id"))
+      {
+        d_id=sessionStorage.getItem("d_id");
+        this.$root.doctorid=d_id;
+      }
+      console.log(this.$root.doctorid)
+      this.$axios.get(Api.registerUrl+d_id,
+)
+           .then(function(response){
+                  console.info(response.data);
+                  that.tableData=response.data.data;
+               
+                 })
+           .catch(function(error){
+                   console.info(error);
+                 });
+    },
     created(){
       const that=this;
       console.log(this.$root.doctorid)
@@ -109,12 +131,16 @@ export default {
         d_id=sessionStorage.getItem("d_id");
         this.$root.doctorid=d_id;
       }
+      else
+      {
+        sessionStorage.setItem("d_id",d_id)
+      }
       console.log(this.$root.doctorid)
-      this.$axios.get(Api.registerUrl+"/"+d_id,
-     )
+      this.$axios.get(Api.registerUrl+d_id,
+)
            .then(function(response){
                   console.info(response.data);
-                  that.tableData=response.data;
+                  that.tableData=response.data.data;
                
                  })
            .catch(function(error){
@@ -123,35 +149,35 @@ export default {
           
            window.addEventListener('beforeunload', () => {
              this.$root.doctorid=sessionStorage.getItem("d_id")
-             console.log(this.$root.doctorid)
+             console.log("oncreate"+this.$root.doctorid)
     })
 
     },
     methods:{
     open(val,row) {
-        if(val.target.innerText=="创建远程听诊")
-        {
-          this.$confirm('您确定创建远程肺音听诊?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '创建成功!'
-          });
-         console.log(val.target.innerText )
-         var name = this.stuname;
-         val.target.innerText= name
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消'
-          });          
-        });
-     }
-     else if(val.target.innerText=="肺音数据")
-     {
+    //     if(val.target.innerText=="创建远程听诊")
+    //     {
+    //       this.$confirm('您确定创建远程肺音听诊?', '提示', {
+    //       confirmButtonText: '确定',
+    //       cancelButtonText: '取消',
+    //       type: 'warning'
+    //     }).then(() => {
+    //       this.$message({
+    //         type: 'success',
+    //         message: '创建成功!'
+    //       });
+    //      console.log(val.target.innerText )
+    //      var name = this.stuname;
+    //      val.target.innerText= name
+    //     }).catch(() => {
+    //       this.$message({
+    //         type: 'info',
+    //         message: '已取消'
+    //       });          
+    //     });
+    //  }
+    //  else if(val.target.innerText=="肺音数据")
+    //  {
          this.$router.push({
            name:'voicedata',
            params:{
@@ -163,7 +189,7 @@ export default {
              d_institution:row.d_institution
            }
          })
-     }
+     //}
       },
       view(row)
       {
